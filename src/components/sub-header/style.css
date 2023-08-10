@@ -1,0 +1,45 @@
+.subheader-main {
+    height: 100px;
+    background: #FDFDFD 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #9D9D9D29;
+    border-radius: 10px;
+    opacity: 1;
+    margin-right: 24px;
+    margin-top: 19px;
+    margin-left: 24px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1 {
+    font: normal normal bold 24px/32px Nunito Sans;
+    letter-spacing: 0px;
+}
+
+.action-button {
+    /* width: 259px; */
+    height: 58px;
+    background: #EAF9FF 0% 0% no-repeat padding-box;
+    border-radius: 50px;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 35px;
+}
+
+.action-icon-container {
+    background-color: #03AEEE;
+    border-radius: 50%;
+    height: 58px;
+    width: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-name {
+    margin-right: 27px;
+}

@@ -1,0 +1,43 @@
+.nav-icon-label {
+    background-color: #03aeee;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 19px;
+    border-radius: 50px 0px 0px 50px;
+    width: 285px;
+    height: 60px;
+    background: #03AEEE 0% 0% no-repeat padding-box;
+    border-radius: 50px 0px 0px 50px;
+    opacity: 1;
+}
+
+.nav-icon {
+    border-radius: 50%;
+    border: 10px solid white;
+    width: fit-content;
+    margin-right: 5px;
+    background-color: #ffffff;
+}
+
+.nav-label-title {
+    color: #ffffff;
+}
+
+.nav-logo {
+    width: 200px;
+    height: 45px;
+    margin: 20px;
+}
+
+.nav-aside {
+    /* position: absolute; */
+    padding-left: 30px;
+    padding-top: 30px;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+}
