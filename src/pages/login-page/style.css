@@ -1,0 +1,46 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.login-image-logo {
+    width: 208px;
+    height: 45px;
+}
+
+.login-bg {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.hero {
+    width: 50%;
+    height: 100vh;
+    background: #03AEEE10 0% 0% no-repeat padding-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-page {
+    display: flex;
+    width: 100%;
+}
+
+.login-image {
+    border-radius: 50%;
+    width: 500px;
+    height: 500px;
+    border: 30px solid rgb(250, 248, 248);
+
+}
+
+.error-message{
+    color: red;
+    align-self: center;
+}

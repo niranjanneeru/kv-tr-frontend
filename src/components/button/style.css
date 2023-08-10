@@ -1,0 +1,17 @@
+.login-button {
+    padding: 15px 12px;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    background-color: #03aeee;
+    color: white;
+    /* border-color: #03aeee; */
+    border: 1px solid #ccc;
+    transition: box-shadow .3s;
+}
+
+.login-button:hover {
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+}
