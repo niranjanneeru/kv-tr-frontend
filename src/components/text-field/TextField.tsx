@@ -3,7 +3,7 @@ import './style.css';
 
 type InputPropType = {
     label: string;
-    textType: 'text' | 'password';
+    textType: 'text' | 'password' | 'date';
     placeHolder: string;
     value: string;
     onChangeCallback: (e) => void;

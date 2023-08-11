@@ -3,6 +3,8 @@ import './styles/global.css';
 import LoginPage from './pages/login-page/LoginPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EmployeePage from './pages/employee-page/EmployeePage';
+import EmployeeEdit from './pages/employee-edit-page/EmployeeEdit';
+import EmployeeDetail from './pages/employee-details/EmployeeDetail';
 
 const App: FC = () => {
 
@@ -11,6 +13,9 @@ const App: FC = () => {
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/employees' element={<EmployeePage />} />
+        <Route path='/employees-edit' element={<EmployeeEdit />} />
+        <Route path='/employee-create' element={<EmployeeEdit />} />
+        <Route path='/employee/:id' element={<EmployeeDetail />} />
         <Route />
       </Routes>
     </BrowserRouter>

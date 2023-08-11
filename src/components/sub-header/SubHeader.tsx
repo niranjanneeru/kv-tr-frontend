@@ -18,7 +18,7 @@ const SubHeader: FC<SubHeaderProps> = ({ title, enableAction = false, actionName
             <h1>{title}</h1>
             {enableAction &&
                 <div className='action-button' onClick={action}>
-                    <div className='action-icon-container'><img src={`assets/icons/${icon}`} alt={actionType} /></div>
+                    <div className='action-icon-container'><img src={`/assets/icons/${icon}`} alt={actionType} /></div>
                     <div className='action-name'>{actionName}</div>
                 </div>}
         </div>

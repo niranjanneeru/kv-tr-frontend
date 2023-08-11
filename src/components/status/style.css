@@ -1,0 +1,17 @@
+.status-component {
+    border-radius: 25px;
+    padding: 7px;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-size: small;
+}
+
+.status-normal {
+    margin-top: 10px;
+    border-radius: 25px;
+    padding: 7px;
+    width: 40%;
+    text-align: center;
+    font-size: small;
+}

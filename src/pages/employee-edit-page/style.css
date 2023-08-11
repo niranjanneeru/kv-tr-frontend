@@ -1,0 +1,15 @@
+.form {
+    background: #FDFDFD 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #9D9D9D29;
+    border-radius: 10px;
+    opacity: 1;
+    display: flex;
+    gap: 45px;
+    flex-wrap: wrap;
+    width: calc(100% - 45px);
+    margin-top: 26px;
+    margin-left: 19px;
+    padding-top: 33px;
+    padding-left: 34px;
+    margin-bottom: 39px;
+}

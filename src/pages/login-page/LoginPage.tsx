@@ -42,12 +42,12 @@ const LoginPage: FC = () => {
         <div className='login-page'>
             <div className='hero'>
                 <div className="wrapper-hero">
-                    <img src="assets/img/banner.png" alt="Login Image" className="login-image" />
+                    <img src="/assets/img/banner.png" alt="Login Image" className="login-image" />
                 </div>
             </div>
             <div className='login-bg'>
                 <div className='login-form'>
-                    <img className="login-image-logo" src="assets/img/kv-logo.png" alt='keyvalue logo' />
+                    <img className="login-image-logo" src="/assets/img/kv-logo.png" alt='keyvalue logo' />
                     <TextField
                         label="Username"
                         textType="text"

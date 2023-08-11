@@ -1,0 +1,23 @@
+.key-val-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: space-between;
+    flex: 1 0 13%;
+}
+
+.card-label {
+    text-align: left;
+    font: normal normal 600 16px/22px;
+    letter-spacing: 0px;
+    color: #8B8D9D;
+    opacity: 1;
+}
+
+.card-value {
+    text-align: left;
+    font: normal normal 600 16px/22px;
+    letter-spacing: 0px;
+    color: #434552;
+    opacity: 1;
+}
