@@ -15,3 +15,43 @@
 .login-button:hover {
     box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
 }
+
+.primary {
+    padding: 15px 12px;
+    width: 150px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    background-color: #03aeee;
+    color: white;
+    /* border-color: #03aeee; */
+    border: 1px solid #ccc;
+    transition: box-shadow .3s;
+}
+
+.primary:hover {
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-button {
+    padding: 15px 12px;
+    width: 150px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    transition: box-shadow .3s;
+
+    font: normal normal 600 16px/22px;
+    letter-spacing: 0px;
+    color: #8A8C8F;
+
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #C9C9C929;
+    border: 1px solid #8A8C8F;
+}
+
+.cancel-button:hover {
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+}

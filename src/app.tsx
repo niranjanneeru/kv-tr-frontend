@@ -13,7 +13,7 @@ const App: FC = () => {
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/employees' element={<EmployeePage />} />
-        <Route path='/employees-edit' element={<EmployeeEdit />} />
+        <Route path='/employee-edit/:id' element={<EmployeeEdit editMode={true} />} />
         <Route path='/employee-create' element={<EmployeeEdit />} />
         <Route path='/employee/:id' element={<EmployeeDetail />} />
         <Route />

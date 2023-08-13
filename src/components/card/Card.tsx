@@ -3,6 +3,8 @@ import './style.css';
 
 const Card = ({ data, statusFields }) => {
 
+    console.log(data, statusFields);
+
     return (
         <div className="card">
             {

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Dashboard from "../../layouts/dashboard/Dashboard";
 import './style.css';
 import Card from "../../components/card/Card";
@@ -6,6 +6,7 @@ import createAddress from "../../utils/createAddress";
 
 const EmployeeDetail = () => {
     let { id } = useParams();
+    const navigate = useNavigate();
 
     console.log(id);
 
@@ -20,7 +21,7 @@ const EmployeeDetail = () => {
             "departmentId": 1,
             "role": "UI",
             "joiningDate": "2023-07-15",
-            "isActive": true,
+            "status": "ACTIVE",
             "experience": 5,
             "address": {
                 "createdAt": "2023-08-06T13:13:17.445Z",
@@ -64,17 +65,20 @@ const EmployeeDetail = () => {
         "Department": department,
         "Role": data.role,
         "Experience": data.experience,
-        "Status": data.isActive,
+        "Status": data.status,
         "Address": address,
         "Employee ID": data.id
     };
 
+    function routeToEmployeeEdit() {
+        navigate(`/employee-edit/${data.id}`);
+    }
 
     return (
         <Dashboard
             title="Employee Details"
             enableAction={true}
-            action={() => { }}
+            action={routeToEmployeeEdit}
             actionName="Edit"
             actionType="edit" >
             <Card data={final_data} statusFields={["Status"]} />

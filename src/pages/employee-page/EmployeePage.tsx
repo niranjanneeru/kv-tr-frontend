@@ -4,12 +4,37 @@ import Dashboard from "../../layouts/dashboard/Dashboard";
 import './style.css';
 import data from "../../constants/data";
 import { useNavigate } from "react-router-dom";
+import Popup from "../../components/popup/Popup";
+import { useState } from "react";
 
 const EmployeePage = () => {
+    const [popup, setPopup] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
     const navigate = useNavigate();
 
     function renderCreateEmployee() {
         navigate('/employee-create');
+    }
+
+    function routeToEmployeeEdit(id) {
+        return (event) => {
+            navigate(`/employee-edit/${id}`);
+            event.stopPropagation();
+        };
+    }
+
+    function routeToEmployeeDelete(id) {
+        return (event) => {
+            setSelectedItem(id);
+            setPopup(true);
+            event.stopPropagation();
+        };
+    }
+
+    function confirmAction() {
+        console.log("Delete ", selectedItem);
+        // delete();
+        setPopup(false);
     }
 
     return (
@@ -32,14 +57,15 @@ const EmployeePage = () => {
                             id={employee.id}
                             joining_date={employee.joiningDate}
                             role={employee.role}
-                            statusType={employee.isActive}
+                            statusType={employee.status}
                             experience={employee.experience}
-                            deleteAction={() => { }}
-                            editAction={() => { }}
+                            deleteAction={routeToEmployeeDelete(employee.id)}
+                            editAction={routeToEmployeeEdit(employee.id)}
                             department={employee.department.name} />;
                     })}
                 </tbody>
             </table>
+            <Popup show={popup} title={"Are you sure ?"} desc={"Do you really want to delete employee ?"} OnConfirmAction={confirmAction} OnCancelAction={() => { setPopup(false); }} />
         </Dashboard>
     );
 };

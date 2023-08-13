@@ -11,5 +11,16 @@
     margin-left: 19px;
     padding-top: 33px;
     padding-left: 34px;
-    margin-bottom: 39px;
+    padding-bottom: 39px;
+}
+
+.address {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 45px;
+}
+
+.button-panel {
+    display: flex;
+    gap: 10px;
 }

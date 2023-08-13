@@ -10,7 +10,7 @@ const data = {
             "departmentId": 1,
             "role": "MANAGER",
             "joiningDate": "2023-10-20",
-            "isActive": true,
+            "status": "ACTIVE",
             "experience": 6,
             "department": {
                 "createdAt": "2023-08-06T13:08:15.255Z",
@@ -31,7 +31,7 @@ const data = {
             "departmentId": 1,
             "role": "UI",
             "joiningDate": "2023-07-15",
-            "isActive": true,
+            "status": "INACTIVE",
             "experience": 5,
             "department": {
                 "createdAt": "2023-08-06T13:08:15.255Z",

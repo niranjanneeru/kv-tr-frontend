@@ -8,15 +8,14 @@ type ListItemType = {
     id: string;
     joining_date: string;
     role: string;
-    statusType: boolean;
+    statusType: string;
     experience: number;
     department: string;
-    deleteAction: () => void;
-    editAction: () => void;
+    deleteAction: (event) => void;
+    editAction: (event) => void;
 }
 
 const ListItem: FC<ListItemType> = ({ name, id, joining_date, role, statusType, experience, department, deleteAction, editAction }) => {
-    console.log(deleteAction, editAction);
     const navigate = useNavigate();
 
     function routeToEmployeeDetail() {
@@ -34,8 +33,8 @@ const ListItem: FC<ListItemType> = ({ name, id, joining_date, role, statusType, 
             <td>{department}</td>
             <td>
                 <div className='actions-item'>
-                    <img className='delete-action' src='/assets/icons/delete.png' alt='delete-each' />
-                    <img className='edit-action' src='/assets/icons/edit-list.svg' alt='edit-each' />
+                    <img className='delete-action' onClick={deleteAction} src='/assets/icons/delete.png' alt='delete-each' />
+                    <img className='edit-action' onClick={editAction} src='/assets/icons/edit-list.svg' alt='edit-each' />
                 </div>
             </td>
         </tr>
