@@ -101,7 +101,7 @@ const EmployeeEdit = ({ editMode = false }) => {
 
     return (
         <Dashboard
-            title="Create Employee"
+            title={editMode ? "EditEmployee" : "Create Employee"}
             enableAction={false} >
             <div className="form">
                 <TextField label="Employee Name" textType="text" placeHolder="Employee Name" value={name} isLogin={false} onChangeCallback={(e) => {
@@ -154,7 +154,10 @@ const EmployeeEdit = ({ editMode = false }) => {
                     }} />
                 </div>
 
-                {editMode && <TextField disabled = {true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}
+                {editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}
+
+                {editMode && <div style={{ visibility: "hidden" }}>{editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}</div>}
+                {editMode && <div style={{ visibility: "hidden" }}>{editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}</div>}
 
                 <div className="button-panel">
                     <Button label={editMode ? "Save" : "Create"} buttonType="submit" onClickCallback={() => { }} buttonDesign="create" />

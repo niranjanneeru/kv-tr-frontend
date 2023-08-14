@@ -1,18 +1,18 @@
 import { FC } from 'react';
 import './style.css';
 
-type InputPropType = {
+type ButtonType = {
     label: string;
     buttonType: 'submit' | 'reset' | 'button';
     onClickCallback: (e) => void;
     buttonDesign?: string;
 }
 
-const Button: FC<InputPropType> = ({ label, buttonType, onClickCallback, buttonDesign = "primary" }) => {
+const Button: FC<ButtonType> = ({ label, buttonType, onClickCallback, buttonDesign = "primary" }) => {
     const buttonClass = getCSSClass(buttonDesign);
 
     return (
-        <button className={buttonClass} type={buttonType} onClick={onClickCallback}>{label}</button>
+        <button className={buttonClass} type={buttonType} onClick={onClickCallback} data-testid="button-create-id" >{label}</button>
     );
 };
 
