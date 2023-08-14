@@ -18,6 +18,13 @@ describe("Test for Button Component", () => {
         expect(dom).not.toHaveAttribute('type', 'cancel');
     });
 
+    it("To Match Snapshot", () => {
+        render(<Button label="create" buttonType="submit" onClickCallback={() => { }} />);
+        const dom = screen.getByTestId("button-create-id");
+
+        expect(dom).toMatchSnapshot();
+    });
+
     it("If Callback works", () => {
         const cb = jest.fn();
         render(<Button label="create" buttonType="submit" onClickCallback={cb} />);
