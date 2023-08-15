@@ -22,4 +22,5 @@ function getCSSClass(buttonDesign: string) {
     if (buttonDesign === "primary") return "login-button";
     if (buttonDesign === "cancel") return "cancel-button";
     if (buttonDesign === "create") return "primary";
+    if (buttonDesign === "delete") return "delete";
 }

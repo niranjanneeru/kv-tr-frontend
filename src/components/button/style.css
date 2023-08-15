@@ -55,3 +55,21 @@
 .cancel-button:hover {
     box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
 }
+
+.delete {
+    padding: 15px 12px;
+    width: 150px;
+    text-align: center;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(240, 105, 105);
+    color: white;
+    /* border-color: #03aeee; */
+    border: 1px solid #ccc;
+    transition: box-shadow .3s;
+}
+
+.delete:hover {
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.2);
+}

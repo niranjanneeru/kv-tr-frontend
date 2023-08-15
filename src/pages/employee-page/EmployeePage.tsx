@@ -2,12 +2,19 @@ import ListItem from "../../components/list/ListItem";
 import ListHeader from "../../components/list/ListHeader";
 import Dashboard from "../../layouts/dashboard/Dashboard";
 import './style.css';
-import data from "../../constants/data";
+// import data from "../../constants/data";
 import { useNavigate } from "react-router-dom";
 import Popup from "../../components/popup/Popup";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const EmployeePage = () => {
+    const employeesData = useSelector((state) => {
+        return state;
+    });
+
+    console.log(employeesData);
+
     const [popup, setPopup] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const navigate = useNavigate();
@@ -31,9 +38,14 @@ const EmployeePage = () => {
         };
     }
 
+    const dispatch = useDispatch();
+
     function confirmAction() {
         console.log("Delete ", selectedItem);
-        // delete();
+        dispatch({
+            type: 'EMPLOYEE.DELETE',
+            payload: selectedItem
+        });
         setPopup(false);
     }
 
@@ -50,7 +62,7 @@ const EmployeePage = () => {
                     <ListHeader />
                 </thead>
                 <tbody>
-                    {data.data.map((employee) => {
+                    {employeesData['employees'].map((employee) => {
                         return <ListItem
                             key={employee.id}
                             name={employee.name}

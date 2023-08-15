@@ -7,6 +7,8 @@ import departmentData from "../../constants/departmentData";
 import roleData from "../../constants/roleData";
 import Button from "../../components/button/Button";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 } from 'uuid';
 
 const EmployeeEdit = ({ editMode = false }) => {
 
@@ -14,50 +16,13 @@ const EmployeeEdit = ({ editMode = false }) => {
 
     console.log(id);
 
-    let data: any = {
-        "data": {
-            "createdAt": "2023-08-06T13:13:17.445Z",
-            "updatedAt": "2023-08-06T13:15:52.523Z",
-            "deletedAt": null,
-            "id": "8f257891-076d-413e-9c68-da6e7c0f394b",
-            "name": "John Doe",
-            "email": "john.doe@example.com",
-            "departmentId": 1,
-            "role": "UI",
-            "joiningDate": "2023-07-15",
-            "status": "ACTIVE",
-            "experience": 5,
-            "address": {
-                "createdAt": "2023-08-06T13:13:17.445Z",
-                "updatedAt": "2023-08-07T02:03:48.737Z",
-                "deletedAt": null,
-                "id": 2,
-                "addressLine1": "123 Main Street",
-                "addressLine2": "Apt 4B",
-                "city": "New York",
-                "state": "NY",
-                "country": "USA",
-                "pincode": "10001"
-            },
-            "department": {
-                "createdAt": "2023-08-06T13:08:15.255Z",
-                "updatedAt": "2023-08-07T02:04:04.663Z",
-                "deletedAt": null,
-                "id": 1,
-                "name": "UI",
-                "description": "Some Long Dev1"
-            }
-        },
-        "errors": null,
-        "message": "OK",
-        "meta": {
-            "length": 1,
-            "took": 36,
-            "total": 1
-        }
-    };
+    const employeesData = useSelector((state) => {
+        return state;
+    });
 
-    data = data.data;
+    let data = employeesData["employees"].find((item) => item.id === id);
+
+    console.log(data);
 
     const [name, setName] = useState(editMode ? data.name : "");
     const [joiningDate, setJoiningDate] = useState(editMode ? data.joiningDate : "");
@@ -65,19 +30,22 @@ const EmployeeEdit = ({ editMode = false }) => {
     const [department, setDepartment] = useState(editMode ? data.departmentId : "");
     const [role, setRole] = useState(editMode ? data.role : "");
     const [status, setStatus] = useState(editMode ? data.status : "ACTIVE");
-    const [addressLine1, setAddressLine1] = useState(editMode ? data.address.addressLine1 : "");
-    const [addressLine2, setaddressLine2] = useState(editMode ? data.address.addressLine2 : "");
-    const [city, setCity] = useState(editMode ? data.address.city : "");
-    const [state, setState] = useState(editMode ? data.address.state : "");
-    const [country, setCountry] = useState(editMode ? data.address.country : "");
-    const [pincode, setPincode] = useState(editMode ? data.address.pincode : "");
+    const [addressLine1, setAddressLine1] = useState(editMode ? "data.address.addressLine1" : "");
+    const [addressLine2, setaddressLine2] = useState(editMode ? "data.address.addressLine2" : "");
+    const [city, setCity] = useState(editMode ? "data.address.city" : "");
+    const [state, setState] = useState(editMode ? "data.address.state" : "");
+    const [country, setCountry] = useState(editMode ? "data.address.country" : "");
+    const [pincode, setPincode] = useState(editMode ? "data.address.pincode" : "");
 
 
     let departmentDataModified = {};
 
     departmentData.data.map((department) => {
+        console.log(department);
         departmentDataModified[department.id] = department.name;
     });
+
+    console.log(departmentDataModified);
 
     let roleDataModified = {};
 
@@ -95,7 +63,39 @@ const EmployeeEdit = ({ editMode = false }) => {
     const navigate = useNavigate();
 
     function routeBack() {
-        navigate('/employees');
+        navigate(-1);
+    }
+
+    const dispatch = useDispatch();
+
+    function handleSubmit() {
+        dispatch({
+            type: editMode ? 'EMPLOYEE.EDIT' : 'EMPLOYEE.CREATE',
+            payload: {
+                employee: {
+                    "createdAt": "2023-08-06T13:13:17.445Z",
+                    "updatedAt": "2023-08-06T13:15:52.523Z",
+                    "deletedAt": null,
+                    "id": editMode ? id : v4(),
+                    "name": name,
+                    "email": editMode ? data.email : `${name}@gmail.com`,
+                    "departmentId": +department,
+                    "role": role,
+                    "joiningDate": joiningDate,
+                    "status": status,
+                    "experience": +experience,
+                    "department": {
+                        "createdAt": "2023-08-06T13:08:15.255Z",
+                        "updatedAt": "2023-08-07T02:04:04.663Z",
+                        "deletedAt": null,
+                        "id": +department,
+                        "name": departmentDataModified[Number(department)],
+                        "description": "Some Long Dev1"
+                    }
+                }
+            }
+        });
+        routeBack();
     }
 
 
@@ -160,7 +160,7 @@ const EmployeeEdit = ({ editMode = false }) => {
                 {editMode && <div style={{ visibility: "hidden" }}>{editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}</div>}
 
                 <div className="button-panel">
-                    <Button label={editMode ? "Save" : "Create"} buttonType="submit" onClickCallback={() => { }} buttonDesign="create" />
+                    <Button label={editMode ? "Save" : "Create"} buttonType="submit" onClickCallback={handleSubmit} buttonDesign="create" />
                     <Button label="Cancel" buttonType="reset" onClickCallback={routeBack} buttonDesign="cancel" />
                 </div>
             </div>
