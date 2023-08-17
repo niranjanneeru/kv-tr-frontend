@@ -41,7 +41,7 @@ const EmployeeEdit = ({ editMode = false }) => {
 	const { data: departmentData, isSuccess: isDepartmentAPISucess } = useGetDepartmentListQuery('');
 	const { data: rolesData, isSuccess: isRolesAPISucess } = useGetRolesListQuery('');
 	const { data: statusData, isSuccess: isStatusAPISucess } = useGetStatusListQuery('');
-	const [addEmployee, { data: employeeData, isSuccess: isAddingSuccess }] =
+	const [addEmployee, { data: employeeData, isSuccess: isAddingSuccess, error: addErrors }] =
 		useAddEmployeeMutation();
 	const [updateEmployee, { isSuccess: isUpdatingSuccess, error: errorUpdateEmployee }] =
 		useUpdateEmployeeMutation();
@@ -52,6 +52,24 @@ const EmployeeEdit = ({ editMode = false }) => {
 	}
 
 	function handleSubmit() {
+		if (name.trim() === '') {
+			alert('Empty Name');
+
+			return;
+		}
+
+		if (email.trim() === '') {
+			alert('Empty Email');
+
+			return;
+		}
+
+		if (!editMode && password.trim() === '') {
+			alert('Empty Password');
+
+			return;
+		}
+
 		if (editMode) {
 			updateEmployee({
 				id: id,
@@ -95,6 +113,10 @@ const EmployeeEdit = ({ editMode = false }) => {
 			});
 		}
 	}
+
+	useEffect(() => {
+		if (addErrors) if (addErrors['status'] === 404) alert(addErrors['data']['message']);
+	}, [addErrors]);
 
 	useEffect(() => {
 		if (errorGetEmployee && errorGetEmployee['status'] === 403) navigate('/login');

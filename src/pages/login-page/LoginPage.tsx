@@ -15,7 +15,7 @@ const LoginPage: FC = () => {
 	const [login, { data, isSuccess, isError, error: errorInLogin }] = useLoginMutation();
 
 	useEffect(() => {
-		if (isError) setError(errorInLogin['data']['message']);
+		if (isError && errorInLogin) setError(errorInLogin['data']['message']);
 	}, [isError, errorInLogin]);
 
 	const onClickLogin = () => {
