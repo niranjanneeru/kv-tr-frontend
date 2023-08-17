@@ -1,171 +1,376 @@
-import { useState } from "react";
-import TextField from "../../components/text-field/TextField";
-import Dashboard from "../../layouts/dashboard/Dashboard";
+import { useEffect, useState } from 'react';
+import TextField from '../../components/text-field/TextField';
+import Dashboard from '../../layouts/dashboard/Dashboard';
 import './style.css';
-import DropDown from "../../components/drop-down/DropDown";
-import departmentData from "../../constants/departmentData";
-import roleData from "../../constants/roleData";
-import Button from "../../components/button/Button";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { v4 } from 'uuid';
+import DropDown from '../../components/drop-down/DropDown';
+import Button from '../../components/button/Button';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+	useAddEmployeeMutation,
+	useGetDepartmentListQuery,
+	useGetRolesListQuery,
+	useGetStatusListQuery,
+	useUpdateEmployeeMutation
+} from './api';
+import { useLazyGetEmployeeByIDQuery } from '../employee-details/api';
 
 const EmployeeEdit = ({ editMode = false }) => {
+	let { id } = useParams();
 
-    let { id } = useParams();
+	const [name, setName] = useState('');
+	const [email, setEmail] = useState('');
+	const [age, setAge] = useState(20);
+	const [password, setPassword] = useState('');
+	const [joiningDate, setJoiningDate] = useState('');
+	const [experience, setExperience] = useState(1);
+	const [department, setDepartment] = useState('');
+	const [role, setRole] = useState('');
+	const [status, setStatus] = useState('ACTIVE');
+	const [addressLine1, setAddressLine1] = useState('');
+	const [addressLine2, setAddressLine2] = useState('');
+	const [city, setCity] = useState('');
+	const [state, setState] = useState('');
+	const [country, setCountry] = useState('');
+	const [pincode, setPincode] = useState('');
+	const [departmentDataModified, setDepartmentData] = useState({});
+	const [roleDataModified, setRoleData] = useState({});
+	const [statusOptions, setStatusOptions] = useState({});
 
-    console.log(id);
+	const [getEmployeeById, { data, isSuccess, error: errorGetEmployee }] =
+		useLazyGetEmployeeByIDQuery();
+	const { data: departmentData, isSuccess: isDepartmentAPISucess } = useGetDepartmentListQuery('');
+	const { data: rolesData, isSuccess: isRolesAPISucess } = useGetRolesListQuery('');
+	const { data: statusData, isSuccess: isStatusAPISucess } = useGetStatusListQuery('');
+	const [addEmployee, { data: employeeData, isSuccess: isAddingSuccess }] =
+		useAddEmployeeMutation();
+	const [updateEmployee, { isSuccess: isUpdatingSuccess, error: errorUpdateEmployee }] =
+		useUpdateEmployeeMutation();
+	const navigate = useNavigate();
 
-    const employeesData = useSelector((state) => {
-        return state;
-    });
+	function routeBack() {
+		navigate(-1);
+	}
 
-    let data = employeesData["employees"].find((item) => item.id === id);
+	function handleSubmit() {
+		if (editMode) {
+			updateEmployee({
+				id: id,
+				name: name,
+				email: email,
+				age: age,
+				joiningDate: joiningDate,
+				experience: +experience,
+				departmentId: +department,
+				role: role,
+				status: status,
+				address: {
+					address_line_1: addressLine1,
+					address_line_2: addressLine2,
+					city: city,
+					state: state,
+					country: country,
+					pincode: pincode
+				}
+			});
+			routeBack();
+		} else {
+			addEmployee({
+				email: email,
+				age: age,
+				password: password,
+				name: name,
+				joiningDate: joiningDate,
+				experience: +experience,
+				departmentId: +department,
+				role: role,
+				status: status,
+				address: {
+					address_line_1: addressLine1,
+					address_line_2: addressLine2,
+					city: city,
+					state: state,
+					country: country,
+					pincode: pincode
+				}
+			});
+		}
+	}
 
-    console.log(data);
+	useEffect(() => {
+		if (errorGetEmployee && errorGetEmployee['status'] === 403) navigate('/login');
+	}, [errorGetEmployee]);
 
-    const [name, setName] = useState(editMode ? data.name : "");
-    const [joiningDate, setJoiningDate] = useState(editMode ? data.joiningDate : "");
-    const [experience, setExperience] = useState(editMode ? data.experience : 1);
-    const [department, setDepartment] = useState(editMode ? data.departmentId : "");
-    const [role, setRole] = useState(editMode ? data.role : "");
-    const [status, setStatus] = useState(editMode ? data.status : "ACTIVE");
-    const [addressLine1, setAddressLine1] = useState(editMode ? "data.address.addressLine1" : "");
-    const [addressLine2, setaddressLine2] = useState(editMode ? "data.address.addressLine2" : "");
-    const [city, setCity] = useState(editMode ? "data.address.city" : "");
-    const [state, setState] = useState(editMode ? "data.address.state" : "");
-    const [country, setCountry] = useState(editMode ? "data.address.country" : "");
-    const [pincode, setPincode] = useState(editMode ? "data.address.pincode" : "");
+	useEffect(() => {
+		if (errorGetEmployee && errorGetEmployee['status'] === 403) alert('No Permisssion');
+	}, [errorUpdateEmployee]);
 
+	useEffect(() => {
+		if (editMode) getEmployeeById(id);
+	}, []);
 
-    let departmentDataModified = {};
+	useEffect(() => {
+		if (isSuccess) {
+			setAge(data.data.age);
+			setName(data?.data?.name);
+			setEmail(data.data.email);
+			setJoiningDate(data.data.joiningDate);
+			setExperience(data.data.experience);
+			setDepartment(data.data.departmentId);
+			setRole(data.data.role);
+			setStatus(data.data.status);
+			setAddressLine1(data.data.address.addressLine1);
+			setAddressLine2(data.data.address.addressLine2);
+			setCity(data.data.address.city);
+			setState(data.data.address.state);
+			setPincode(data.data.address.pincode);
+			setCountry(data.data.address.country);
+		}
+	}, [isSuccess]);
 
-    departmentData.data.map((department) => {
-        console.log(department);
-        departmentDataModified[department.id] = department.name;
-    });
+	useEffect(() => {
+		if (isUpdatingSuccess) routeBack();
+	}, [isUpdatingSuccess]);
 
-    console.log(departmentDataModified);
+	useEffect(() => {
+		if (isAddingSuccess) routeBack();
+		console.log(employeeData);
+	}, [isAddingSuccess]);
 
-    let roleDataModified = {};
+	useEffect(() => {
+		let temp = {};
 
-    roleData.data.map((role) => {
-        roleDataModified[role] = role;
-    });
+		if (isRolesAPISucess)
+			rolesData.data.map((role) => {
+				temp[role] = role;
+			});
+		setRoleData(temp);
+	}, [isRolesAPISucess]);
 
-    let statusOptions = {
-        ACTIVE: "ACTIVE",
-        "INACTIVE": "IN ACTIVE",
-        PROBATION: "PROBATION",
-        TERMINATED: "TERMINATED"
-    };
+	useEffect(() => {
+		let temp = {};
 
-    const navigate = useNavigate();
+		if (isDepartmentAPISucess)
+			departmentData?.data.forEach((department) => {
+				temp[department.id] = department.name;
+			});
+		setDepartmentData(temp);
+	}, [isDepartmentAPISucess]);
 
-    function routeBack() {
-        navigate(-1);
-    }
+	useEffect(() => {
+		let temp = {};
 
-    const dispatch = useDispatch();
+		if (isStatusAPISucess)
+			statusData.data.forEach((status) => {
+				temp[status] = status;
+			});
+		setStatusOptions(temp);
+	}, [isStatusAPISucess]);
 
-    function handleSubmit() {
-        dispatch({
-            type: editMode ? 'EMPLOYEE.EDIT' : 'EMPLOYEE.CREATE',
-            payload: {
-                employee: {
-                    "createdAt": "2023-08-06T13:13:17.445Z",
-                    "updatedAt": "2023-08-06T13:15:52.523Z",
-                    "deletedAt": null,
-                    "id": editMode ? id : v4(),
-                    "name": name,
-                    "email": editMode ? data.email : `${name}@gmail.com`,
-                    "departmentId": +department,
-                    "role": role,
-                    "joiningDate": joiningDate,
-                    "status": status,
-                    "experience": +experience,
-                    "department": {
-                        "createdAt": "2023-08-06T13:08:15.255Z",
-                        "updatedAt": "2023-08-07T02:04:04.663Z",
-                        "deletedAt": null,
-                        "id": +department,
-                        "name": departmentDataModified[Number(department)],
-                        "description": "Some Long Dev1"
-                    }
-                }
-            }
-        });
-        routeBack();
-    }
+	return (
+		<Dashboard title={editMode ? 'Edit Employee' : 'Create Employee'} enableAction={false}>
+			<div className='form'>
+				<TextField
+					label='Employee Name'
+					textType='text'
+					placeHolder='Employee Name'
+					value={name}
+					isLogin={false}
+					onChangeCallback={(e) => {
+						setName(e.target.value);
+					}}
+				/>
 
+				<TextField
+					disabled={editMode}
+					label='Employee Email'
+					textType='email'
+					placeHolder='Email'
+					value={email}
+					isLogin={false}
+					onChangeCallback={(e) => {
+						setEmail(e.target.value);
+					}}
+				/>
 
-    return (
-        <Dashboard
-            title={editMode ? "EditEmployee" : "Create Employee"}
-            enableAction={false} >
-            <div className="form">
-                <TextField label="Employee Name" textType="text" placeHolder="Employee Name" value={name} isLogin={false} onChangeCallback={(e) => {
-                    setName(e.target.value);
-                }} />
+				{!editMode && (
+					<TextField
+						disabled={editMode}
+						label='Employee Password'
+						textType='password'
+						placeHolder='Password'
+						value={password}
+						isLogin={false}
+						onChangeCallback={(e) => {
+							setPassword(e.target.value);
+						}}
+					/>
+				)}
 
-                <TextField label="Joining Date" textType="date" placeHolder="Joining Date" value={joiningDate} isLogin={false} onChangeCallback={(e) => {
-                    setJoiningDate(e.target.value);
-                }} />
+				<TextField
+					label='Joining Date'
+					textType='date'
+					placeHolder='Joining Date'
+					value={joiningDate}
+					isLogin={false}
+					onChangeCallback={(e) => {
+						setJoiningDate(e.target.value);
+					}}
+				/>
 
-                <TextField label="Experience(Yrs)" textType="text" placeHolder="Experience" value={experience} isLogin={false} onChangeCallback={(e) => {
-                    setExperience(e.target.value);
-                }} />
+				<TextField
+					label='Experience(Yrs)'
+					textType='text'
+					placeHolder='Experience'
+					value={experience as unknown as string}
+					isLogin={false}
+					onChangeCallback={(e) => {
+						setExperience(e.target.value);
+					}}
+				/>
 
-                <DropDown label="Department" options={departmentDataModified} placeHolder="Department" value={department} onChangeCallback={(e) => {
-                    setDepartment(e.target.value);
-                }} />
+				<TextField
+					label='Age'
+					textType='text'
+					placeHolder='Age'
+					value={age as unknown as string}
+					isLogin={false}
+					onChangeCallback={(e) => {
+						setAge(e.target.value);
+					}}
+				/>
 
-                <DropDown label="Role" options={roleDataModified} placeHolder="Role" value={role} onChangeCallback={(e) => {
-                    setRole(e.target.value);
-                }} />
+				<DropDown
+					label='Department'
+					options={departmentDataModified}
+					placeHolder='Department'
+					value={department}
+					onChangeCallback={(e) => {
+						setDepartment(e.target.value);
+					}}
+				/>
 
-                <DropDown label="Status" options={statusOptions} placeHolder="Status" value={status} onChangeCallback={(e) => {
-                    setStatus(e.target.value);
-                }} />
+				<DropDown
+					label='Role'
+					options={roleDataModified}
+					placeHolder='Role'
+					value={role}
+					onChangeCallback={(e) => {
+						setRole(e.target.value);
+					}}
+				/>
 
-                <div className="address">
-                    <TextField label="Address" textType="text" placeHolder="Address Line 1" value={addressLine1} isLogin={false} onChangeCallback={(e) => {
-                        setAddressLine1(e.target.value);
-                    }} />
+				<DropDown
+					label='Status'
+					options={statusOptions}
+					placeHolder='Status'
+					value={status}
+					onChangeCallback={(e) => {
+						setStatus(e.target.value);
+					}}
+				/>
 
-                    <TextField label="A" textType="text" placeHolder="Address Line 2" value={addressLine2} isLogin={false} isLabelHidden={true} onChangeCallback={(e) => {
-                        setaddressLine2(e.target.value);
-                    }} />
+				{editMode && (
+					<TextField
+						label='Employee ID'
+						disabled={true}
+						textType='text'
+						placeHolder='Employee ID'
+						value={id}
+						isLogin={false}
+						onChangeCallback={() => {}}
+					/>
+				)}
 
-                    <TextField label="A" textType="text" placeHolder="City" value={city} isLogin={false} isLabelHidden={true} onChangeCallback={(e) => {
-                        setCity(e.target.value);
-                    }} />
+				<div className='address'>
+					<TextField
+						label='Address'
+						textType='text'
+						placeHolder='Address Line 1'
+						value={addressLine1}
+						isLogin={false}
+						onChangeCallback={(e) => {
+							setAddressLine1(e.target.value);
+						}}
+					/>
 
-                    <TextField label="" textType="text" placeHolder="State" value={state} isLogin={false} isLabelHidden={true} onChangeCallback={(e) => {
-                        setState(e.target.value);
-                    }} />
+					<TextField
+						label='A'
+						textType='text'
+						placeHolder='Address Line 2'
+						value={addressLine2}
+						isLogin={false}
+						isLabelHidden={true}
+						onChangeCallback={(e) => {
+							setAddressLine2(e.target.value);
+						}}
+					/>
 
-                    <TextField label="" textType="text" placeHolder="Country" value={country} isLogin={false} isLabelHidden={true} onChangeCallback={(e) => {
-                        setCountry(e.target.value);
-                    }} />
+					<TextField
+						label='A'
+						textType='text'
+						placeHolder='City'
+						value={city}
+						isLogin={false}
+						isLabelHidden={true}
+						onChangeCallback={(e) => {
+							setCity(e.target.value);
+						}}
+					/>
 
-                    <TextField label="" textType="text" placeHolder="Pincode" value={pincode} isLogin={false} isLabelHidden={true} onChangeCallback={(e) => {
-                        setPincode(e.target.value);
-                    }} />
-                </div>
+					<TextField
+						label=''
+						textType='text'
+						placeHolder='State'
+						value={state}
+						isLogin={false}
+						isLabelHidden={true}
+						onChangeCallback={(e) => {
+							setState(e.target.value);
+						}}
+					/>
 
-                {editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}
+					<TextField
+						label=''
+						textType='text'
+						placeHolder='Country'
+						value={country}
+						isLogin={false}
+						isLabelHidden={true}
+						onChangeCallback={(e) => {
+							setCountry(e.target.value);
+						}}
+					/>
 
-                {editMode && <div style={{ visibility: "hidden" }}>{editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}</div>}
-                {editMode && <div style={{ visibility: "hidden" }}>{editMode && <TextField disabled={true} label="Employee ID" textType="text" placeHolder="Employee ID" value={data.id} isLogin={false} onChangeCallback={() => { }} />}</div>}
+					<TextField
+						label=''
+						textType='text'
+						placeHolder='Pincode'
+						value={pincode}
+						isLogin={false}
+						isLabelHidden={true}
+						onChangeCallback={(e) => {
+							setPincode(e.target.value);
+						}}
+					/>
+				</div>
 
-                <div className="button-panel">
-                    <Button label={editMode ? "Save" : "Create"} buttonType="submit" onClickCallback={handleSubmit} buttonDesign="create" />
-                    <Button label="Cancel" buttonType="reset" onClickCallback={routeBack} buttonDesign="cancel" />
-                </div>
-            </div>
-        </Dashboard>
-    );
+				<div className='button-panel'>
+					<Button
+						label={editMode ? 'Save' : 'Create'}
+						buttonType='submit'
+						onClickCallback={handleSubmit}
+						buttonDesign='create'
+					/>
+					<Button
+						label='Cancel'
+						buttonType='reset'
+						onClickCallback={routeBack}
+						buttonDesign='cancel'
+					/>
+				</div>
+			</div>
+		</Dashboard>
+	);
 };
 
 export default EmployeeEdit;

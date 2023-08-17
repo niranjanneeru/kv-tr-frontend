@@ -1,85 +1,110 @@
-import ListItem from "../../components/list/ListItem";
-import ListHeader from "../../components/list/ListHeader";
-import Dashboard from "../../layouts/dashboard/Dashboard";
+import ListItem from '../../components/list/ListItem';
+import ListHeader from '../../components/list/ListHeader';
+import Dashboard from '../../layouts/dashboard/Dashboard';
 import './style.css';
-// import data from "../../constants/data";
-import { useNavigate } from "react-router-dom";
-import Popup from "../../components/popup/Popup";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import Popup from '../../components/popup/Popup';
+import { useEffect, useState } from 'react';
+import { useDeleteEmployeeMutation, useGetEmployeeListQuery } from './api';
+import { useGetLoggedInEmployeeQuery } from '../login-page/api';
 
 const EmployeePage = () => {
-    const employeesData = useSelector((state) => {
-        return state;
-    });
+	const { data: loginData, isSuccess: loginSuccess } = useGetLoggedInEmployeeQuery('');
+	const [profile, setProfile] = useState({ role: '', email: '', name: '' });
 
-    console.log(employeesData);
+	useEffect(() => {
+		setProfile(loginData?.data);
+		console.log(loginData?.data);
+	}, [loginData, loginSuccess]);
 
-    const [popup, setPopup] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const navigate = useNavigate();
+	const { data: employeesData, isSuccess, error } = useGetEmployeeListQuery();
+	const [deleteEmployee, { isSuccess: deletionSuccess }] = useDeleteEmployeeMutation();
 
-    function renderCreateEmployee() {
-        navigate('/employee-create');
-    }
+	const [popup, setPopup] = useState(false);
+	const [selectedItem, setSelectedItem] = useState(null);
+	const navigate = useNavigate();
 
-    function routeToEmployeeEdit(id) {
-        return (event) => {
-            navigate(`/employee-edit/${id}`);
-            event.stopPropagation();
-        };
-    }
+	function renderCreateEmployee() {
+		navigate('/employee-create');
+	}
 
-    function routeToEmployeeDelete(id) {
-        return (event) => {
-            setSelectedItem(id);
-            setPopup(true);
-            event.stopPropagation();
-        };
-    }
+	function routeToEmployeeEdit(id) {
+		if (profile?.role === 'HR')
+			return (event) => {
+				navigate(`/employee-edit/${id}`);
+				event.stopPropagation();
+			};
+	}
 
-    const dispatch = useDispatch();
+	function routeToEmployeeDelete(id) {
+		if (profile?.role === 'HR')
+			return (event) => {
+				setSelectedItem(id);
+				setPopup(true);
+				event.stopPropagation();
+			};
+	}
 
-    function confirmAction() {
-        console.log("Delete ", selectedItem);
-        dispatch({
-            type: 'EMPLOYEE.DELETE',
-            payload: selectedItem
-        });
-        setPopup(false);
-    }
+	function confirmAction() {
+		console.log('Delete ', selectedItem);
+		deleteEmployee(selectedItem);
+	}
 
-    return (
-        <Dashboard
-            title="Employee List"
-            enableAction={true}
-            action={renderCreateEmployee}
-            actionName="Create Employee"
-            actionType="create"
-        >
-            <table className="table-list">
-                <thead>
-                    <ListHeader />
-                </thead>
-                <tbody>
-                    {employeesData['employees'].map((employee) => {
-                        return <ListItem
-                            key={employee.id}
-                            name={employee.name}
-                            id={employee.id}
-                            joining_date={employee.joiningDate}
-                            role={employee.role}
-                            statusType={employee.status}
-                            experience={employee.experience}
-                            deleteAction={routeToEmployeeDelete(employee.id)}
-                            editAction={routeToEmployeeEdit(employee.id)}
-                            department={employee.department.name} />;
-                    })}
-                </tbody>
-            </table>
-            <Popup show={popup} title={"Are you sure ?"} desc={"Do you really want to delete employee ?"} OnConfirmAction={confirmAction} OnCancelAction={() => { setPopup(false); }} />
-        </Dashboard>
-    );
+	useEffect(() => {
+		if (error && error['status'] === 403) navigate('/login');
+	}, [error]);
+
+	useEffect(() => {
+		if (deletionSuccess) {
+			setPopup(false);
+			setSelectedItem(null);
+		}
+	}, [deletionSuccess]);
+
+	return (
+		<Dashboard
+			title='Employee List'
+			enableAction={profile?.role === 'HR'}
+			action={renderCreateEmployee}
+			actionName='Create Employee'
+			actionType='create'
+		>
+			<table className='table-list'>
+				<thead>
+					<ListHeader showAction={profile?.role === 'HR'} />
+				</thead>
+				<tbody>
+					{isSuccess &&
+						employeesData['data'].map((employee) => {
+							return (
+								<ListItem
+									key={employee.id}
+									name={employee.name}
+									id={employee.id}
+									joining_date={employee.joiningDate}
+									role={employee.role}
+									statusType={employee.status}
+									experience={employee.experience}
+									deleteAction={routeToEmployeeDelete(employee.id)}
+									editAction={routeToEmployeeEdit(employee.id)}
+									department={employee.department.name}
+									showActions={profile?.role === 'HR'}
+								/>
+							);
+						})}
+				</tbody>
+			</table>
+			<Popup
+				show={popup}
+				title={'Are you sure ?'}
+				desc={'Do you really want to delete employee ?'}
+				OnConfirmAction={confirmAction}
+				OnCancelAction={() => {
+					setPopup(false);
+				}}
+			/>
+		</Dashboard>
+	);
 };
 
 export default EmployeePage;
