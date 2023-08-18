@@ -1,27 +1,33 @@
-import { render, screen } from "@testing-library/react";
-import Nav from "./Nav";
-import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react';
+import Nav from './Nav';
+import '@testing-library/jest-dom';
 
-describe("Test for Nav Component", () => {
-    it("Renders without errors", () => {
-        render(<Nav />);
-    });
+describe('Test for Nav Component', () => {
+	it('Renders without errors', () => {
+		render(<Nav />);
+	});
 
-    it("Renders logo and label correctly", () => {
-        render(<Nav />);
+	it('To Match Snapshot', () => {
+		const dom = render(<Nav />);
 
-        const logoElement = screen.getByAltText("Logo");
-        const labelElement = screen.getByText("Employee List");
+		expect(dom).toMatchSnapshot();
+	});
 
-        expect(logoElement).toBeInTheDocument();
-        expect(labelElement).toBeInTheDocument();
-    });
+	it('Renders logo and label correctly', () => {
+		render(<Nav />);
 
-    it("Renders employee icon correctly", () => {
-        render(<Nav />);
+		const logoElement = screen.getByAltText('Logo');
+		const labelElement = screen.getByText('Employee List');
 
-        const employeeIcon = screen.getByAltText("employee logo");
+		expect(logoElement).toBeInTheDocument();
+		expect(labelElement).toBeInTheDocument();
+	});
 
-        expect(employeeIcon).toBeInTheDocument();
-    });
+	it('Renders employee icon correctly', () => {
+		render(<Nav />);
+
+		const employeeIcon = screen.getByAltText('employee logo');
+
+		expect(employeeIcon).toBeInTheDocument();
+	});
 });

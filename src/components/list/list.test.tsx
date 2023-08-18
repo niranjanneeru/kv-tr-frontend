@@ -1,81 +1,91 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import ListItem from "./ListItem";
-import '@testing-library/jest-dom'
+import ListItem from './ListItem';
+import '@testing-library/jest-dom';
 
-describe("Test for ListItem Component", () => {
-    const mockDeleteAction = jest.fn();
-    const mockEditAction = jest.fn();
+describe('Test for ListItem Component', () => {
+	const mockDeleteAction = jest.fn();
+	const mockEditAction = jest.fn();
 
-    const listItemProps = {
-        name: "John Doe",
-        id: "123",
-        joining_date: "2023-01-01",
-        role: "Engineer",
-        statusType: "ACTIVE",
-        experience: 5,
-        department: "IT",
-        deleteAction: mockDeleteAction,
-        editAction: mockEditAction,
-    };
+	const listItemProps = {
+		name: 'John Doe',
+		id: '123',
+		joining_date: '2023-01-01',
+		role: 'Engineer',
+		statusType: 'ACTIVE',
+		experience: 5,
+		department: 'IT',
+		deleteAction: mockDeleteAction,
+		editAction: mockEditAction
+	};
 
-    it("Renders without errors", () => {
-        render(
-            <BrowserRouter>
-                <ListItem {...listItemProps} />
-            </BrowserRouter>
-        );
-    });
+	it('To Match Snapshot', () => {
+		const dom = render(
+			<BrowserRouter>
+				<ListItem {...listItemProps} />
+			</BrowserRouter>
+		);
 
-    it("Renders all data correctly", () => {
-        render(
-            <BrowserRouter>
-                <ListItem {...listItemProps} />
-            </BrowserRouter>
-        );
+		expect(dom).toMatchSnapshot();
+	});
 
-        const nameElement = screen.getByText("John Doe");
-        const idElement = screen.getByText("123");
-        const roleElement = screen.getByText("Engineer");
-        const experienceElement = screen.getByText("5 Yr");
-        const departmentElement = screen.getByText("IT");
+	it('Renders without errors', () => {
+		render(
+			<BrowserRouter>
+				<ListItem {...listItemProps} />
+			</BrowserRouter>
+		);
+	});
 
-        expect(nameElement).toBeInTheDocument();
-        expect(idElement).toBeInTheDocument();
-        expect(roleElement).toBeInTheDocument();
-        expect(experienceElement).toBeInTheDocument();
-        expect(departmentElement).toBeInTheDocument();
-    });
+	it('Renders all data correctly', () => {
+		render(
+			<BrowserRouter>
+				<ListItem {...listItemProps} />
+			</BrowserRouter>
+		);
 
-    it("Triggers deleteAction and editAction when buttons are clicked", () => {
-        render(
-            <BrowserRouter>
-                <ListItem {...listItemProps} />
-            </BrowserRouter>
-        );
+		const nameElement = screen.getByText('John Doe');
+		const idElement = screen.getByText('123');
+		const roleElement = screen.getByText('Engineer');
+		const experienceElement = screen.getByText('5 Yr');
+		const departmentElement = screen.getByText('IT');
 
-        const deleteButton = screen.getByAltText("delete-each");
-        const editButton = screen.getByAltText("edit-each");
+		expect(nameElement).toBeInTheDocument();
+		expect(idElement).toBeInTheDocument();
+		expect(roleElement).toBeInTheDocument();
+		expect(experienceElement).toBeInTheDocument();
+		expect(departmentElement).toBeInTheDocument();
+	});
 
-        fireEvent.click(deleteButton);
-        fireEvent.click(editButton);
+	it('Triggers deleteAction and editAction when buttons are clicked', () => {
+		render(
+			<BrowserRouter>
+				<ListItem {...listItemProps} />
+			</BrowserRouter>
+		);
 
-        expect(mockDeleteAction).toHaveBeenCalledTimes(1);
-        expect(mockEditAction).toHaveBeenCalledTimes(1);
-    });
+		const deleteButton = screen.getByAltText('delete-each');
+		const editButton = screen.getByAltText('edit-each');
 
-    it("Navigates to employee detail page when clicked", () => {
-        render(
-            <BrowserRouter>
-                <ListItem {...listItemProps} />
-            </BrowserRouter>
-        );
+		fireEvent.click(deleteButton);
+		fireEvent.click(editButton);
 
-        const listItem = screen.getByRole("row");
+		expect(mockDeleteAction).toHaveBeenCalledTimes(1);
+		expect(mockEditAction).toHaveBeenCalledTimes(1);
+	});
 
-        fireEvent.click(listItem);
+	it('Navigates to employee detail page when clicked', () => {
+		render(
+			<BrowserRouter>
+				<ListItem {...listItemProps} />
+			</BrowserRouter>
+		);
 
-        // Adjust this expectation based on your routing logic and URL
-        expect(window.location.pathname).toBe("/employee/123");
-    });
+		const listItem = screen.getByRole('row');
+
+		fireEvent.click(listItem);
+
+		// Adjust this expectation based on your routing logic and URL
+		expect(window.location.pathname).toBe('/employee/123');
+	});
 });
